@@ -1,0 +1,156 @@
+/* RESET Y ESTILOS BASE */
+.register-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.register-page body {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.register-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: transparent;
+}
+
+/* TÍTULO */
+.register-title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+    letter-spacing: -0.5px;
+}
+
+/* FORMULARIO */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* GRUPOS DE CAMPOS */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* CAMPOS OPCIONALES */
+.form-group .optional {
+    color: #95a5a6;
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+/* INPUTS */
+.register-form input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* VALIDACIÓN VISUAL */
+.register-form input:invalid:not(:placeholder-shown) {
+    border-color: #e74c3c;
+}
+
+.register-form input:valid:not(:placeholder-shown) {
+    border-color: #2ecc71;
+}
+
+/* BOTÓN */
+.register-button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.register-button:hover {
+    background-color: #219955;
+}
+
+/* ENLACE "INICIAR SESIÓN" */
+.login-link {
+    text-align: center;
+    margin-top: 2rem;
+    color: #7f8c8d;
+    font-size: 0.95rem;
+}
+
+.login-link a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.login-link a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* DISEÑO RESPONSIVE */
+@media (max-width: 480px) {
+    .register-title {
+        font-size: 1.8rem;
+    }
+    
+    .register-form input {
+        padding: 12px 14px;
+    }
+    
+    .register-button {
+        padding: 14px;
+    }
+}
+
+/* ESTILOS PARA GRUPO NOMBRE + APELLIDO */
+.name-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 400px) {
+    .name-fields {
+        grid-template-columns: 1fr;
+    }
+}
