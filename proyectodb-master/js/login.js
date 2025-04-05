@@ -7,27 +7,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Validación del formulario
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault(); // Prevenir envío por defecto
-        console.log('Formulario enviado'); // Depuración
+        console.log('Formulario enviado');
 
-        // Validar campos
         if(validateInputs()) {
-            console.log('Campos validados correctamente'); // Depuración
+            console.log('Campos validados correctamente');
             simulateLogin().catch(error => {
                 alert('Error: ' + error.message);
-                console.error(error); // Log para depuración
+                console.error(error);
             });
         } else {
-            console.log('Validación fallida'); // Depuración
+            console.log('Validación fallida');
         }
     });
 
-    // Función para validar los campos
     function validateInputs() {
         const emailValue = emailInput.value.trim();
         const passwordValue = passwordInput.value.trim();
         let isValid = true;
 
-        // Validar email
         if(emailValue === '') {
             setErrorFor(emailInput, 'El email es obligatorio');
             isValid = false;
@@ -38,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setSuccessFor(emailInput);
         }
 
-        // Validar contraseña
         if(passwordValue === '') {
             setErrorFor(passwordInput, 'La contraseña es obligatoria');
             isValid = false;
@@ -52,12 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return isValid;
     }
 
-    // Funciones auxiliares para mostrar errores/éxito
     function setErrorFor(input, message) {
         const formControl = input.parentElement;
         const small = formControl.querySelector('small');
-        
-        // Agregar mensaje de error si no existe
+
         if(!small) {
             const errorElement = document.createElement('small');
             errorElement.style.color = 'red';
@@ -69,41 +63,38 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             small.textContent = message;
         }
-        
+
         input.style.borderColor = 'red';
     }
 
     function setSuccessFor(input) {
         const formControl = input.parentElement;
         const small = formControl.querySelector('small');
-        
+
         if(small) {
             small.remove();
         }
-        
+
         input.style.borderColor = 'skyblue';
     }
 
-    // Validar formato de email
     function isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    // Simular proceso de login (en un caso real sería una petición al servidor)
     async function simulateLogin() {
-        const loginData = {
-            email: emailInput.value.trim(),
-            password: passwordInput.value.trim()
-        };
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
 
-        console.log('Datos de login:', loginData); // Depuración
+        let loginData = { email, password };
 
         submitButton.disabled = true;
         submitButton.textContent = 'Iniciando sesión...';
         submitButton.style.opacity = '0.7';
 
         try {
-            const response = await fetch('http://localhost:4000/login', {
+            // Primera petición sin código
+            let response = await fetch('http://localhost:4000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -111,74 +102,63 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(loginData)
             });
 
+            const messageContainer = document.getElementById('message-container') || createMessageContainer();
+
             if (!response.ok) {
                 const errorData = await response.json();
-                console.error('Error en la respuesta del servidor:', errorData); // Depuración
                 throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
 
-            const data = await response.json();
-            console.log('Respuesta del servidor:', data); // Depuración
+            let data = await response.json();
 
-            const messageContainer = document.getElementById('message-container') || createMessageContainer();
+            if (data.success && data.isAdmin) {
+                // Solicitar código solo si es admin
+                const admin_code = prompt('Introduce tu código de administrador:');
+                if (!admin_code) {
+                    messageContainer.textContent = 'Código de administrador requerido.';
+                    messageContainer.style.color = 'red';
+                    return;
+                }
 
-if (data.success) {
-    const isAdmin = loginData.email.toLowerCase().includes('admin');
+                // Reenviar con código admin
+                loginData.admin_code = admin_code;
+                response = await fetch('http://localhost:4000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
 
-    if (isAdmin) {
-        const codigo = prompt('Introduce el código de administrador:');
-        const codigoCorrecto = '1234'; // Cambia esto por tu código real
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Código incorrecto');
+                }
 
-        if (codigo === codigoCorrecto) {
-            messageContainer.textContent = 'Inicio de sesión exitoso como administrador.';
-            messageContainer.style.color = 'green';
-            setTimeout(() => {
-                window.location.href = 'admin.html';
-            }, 2000);
-        } else {
-            messageContainer.textContent = 'Código de administrador incorrecto.';
-            messageContainer.style.color = 'red';
-            return;
-        }
-    } else {
-        messageContainer.textContent = 'Inicio de sesión exitoso.';
-        messageContainer.style.color = 'green';
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 2000);
-    }
-}
-if (data.success) {
-    const user = data.user; // Obtenemos el usuario devuelto por el servidor
+                data = await response.json();
 
-    if (user && user.role === 'admin') {
-        const codigoIngresado = prompt('Introduce el código de administrador:');
-
-        if (codigoIngresado === user.codigoAdmin) {
-            messageContainer.textContent = 'Inicio de sesión exitoso como administrador.';
-            messageContainer.style.color = 'green';
-            setTimeout(() => {
-                window.location.href = 'admin.html';
-            }, 2000);
-        } else {
-            messageContainer.textContent = 'Código de administrador incorrecto.';
-            messageContainer.style.color = 'red';
-            return; // Detenemos la ejecución si el código es incorrecto
-        }
-    } else {
-        // Usuario normal
-        messageContainer.textContent = 'Inicio de sesión exitoso.';
-        messageContainer.style.color = 'green';
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 2000);
-    }
-}else {
-                messageContainer.textContent = 'Inicio de sesión fallido. Por favor, verifica tus credenciales.';
+                if (data.success) {
+                    messageContainer.textContent = 'Inicio de sesión exitoso como administrador.';
+                    messageContainer.style.color = 'green';
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 2000);
+                } else {
+                    messageContainer.textContent = 'Código de administrador incorrecto.';
+                    messageContainer.style.color = 'red';
+                }
+            } else if (data.success) {
+                // Usuario normal
+                messageContainer.textContent = 'Inicio de sesión exitoso.';
+                messageContainer.style.color = 'green';
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                messageContainer.textContent = 'Inicio de sesión fallido. Verifica tus credenciales.';
                 messageContainer.style.color = 'red';
             }
         } catch (error) {
-            console.error('Error durante el login:', error); // Depuración
             const messageContainer = document.getElementById('message-container') || createMessageContainer();
             messageContainer.textContent = 'Error: ' + error.message;
             messageContainer.style.color = 'red';
