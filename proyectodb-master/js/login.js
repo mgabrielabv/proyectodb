@@ -173,8 +173,7 @@ if (data.success) {
             window.location.href = 'index.html';
         }, 2000);
     }
-}
-else {
+}else {
                 messageContainer.textContent = 'Inicio de sesión fallido. Por favor, verifica tus credenciales.';
                 messageContainer.style.color = 'red';
             }
