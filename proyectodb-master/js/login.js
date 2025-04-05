@@ -122,13 +122,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const messageContainer = document.getElementById('message-container') || createMessageContainer();
 
-            if (data.success) {
-                messageContainer.textContent = 'Inicio de sesión exitoso.';
-                messageContainer.style.color = 'green';
-                setTimeout(() => {
-                    window.location.href = 'index.html'; // Redirigir a la página principal
-                }, 2000); // Redirigir después de 2 segundos
-            } else {
+if (data.success) {
+    const isAdmin = loginData.email.toLowerCase().includes('admin');
+
+    if (isAdmin) {
+        const codigo = prompt('Introduce el código de administrador:');
+        const codigoCorrecto = '1234'; // Cambia esto por tu código real
+
+        if (codigo === codigoCorrecto) {
+            messageContainer.textContent = 'Inicio de sesión exitoso como administrador.';
+            messageContainer.style.color = 'green';
+            setTimeout(() => {
+                window.location.href = 'admin.html';
+            }, 2000);
+        } else {
+            messageContainer.textContent = 'Código de administrador incorrecto.';
+            messageContainer.style.color = 'red';
+            return;
+        }
+    } else {
+        messageContainer.textContent = 'Inicio de sesión exitoso.';
+        messageContainer.style.color = 'green';
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+    }
+}
+if (data.success) {
+    const user = data.user; // Obtenemos el usuario devuelto por el servidor
+
+    if (user && user.role === 'admin') {
+        const codigoIngresado = prompt('Introduce el código de administrador:');
+
+        if (codigoIngresado === user.codigoAdmin) {
+            messageContainer.textContent = 'Inicio de sesión exitoso como administrador.';
+            messageContainer.style.color = 'green';
+            setTimeout(() => {
+                window.location.href = 'admin.html';
+            }, 2000);
+        } else {
+            messageContainer.textContent = 'Código de administrador incorrecto.';
+            messageContainer.style.color = 'red';
+            return; // Detenemos la ejecución si el código es incorrecto
+        }
+    } else {
+        // Usuario normal
+        messageContainer.textContent = 'Inicio de sesión exitoso.';
+        messageContainer.style.color = 'green';
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+    }
+}
+else {
                 messageContainer.textContent = 'Inicio de sesión fallido. Por favor, verifica tus credenciales.';
                 messageContainer.style.color = 'red';
             }
