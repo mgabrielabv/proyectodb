@@ -1,17 +1,53 @@
-const BASE_URL = "http://localhost:3000"; // jose cambia esto si tu backend usa otro puerto
+const BASE_URL = "http://localhost:4000"; // jose cambia esto si tu backend usa otro puerto
 
 async function consultarCartasPorColeccion() {
   const id = document.getElementById("coleccionId").value;
-  const res = await fetch(`${BASE_URL}/cartas?coleccionId=${id}`, { credentials: "include" });
-  const data = await res.json();
-  document.getElementById("cartasResultado").innerText = JSON.stringify(data, null, 2);
+
+  if (!id) {
+    document.getElementById("cartasResultado").innerText = "Por favor, ingresa un ID de colección.";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/cartas?coleccionId=${id}`, { credentials: "include" });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      document.getElementById("cartasResultado").innerText = `Error: ${errorData.error || res.statusText}`;
+      return;
+    }
+
+    const data = await res.json();
+    document.getElementById("cartasResultado").innerText = JSON.stringify(data, null, 2);
+  } catch (error) {
+    console.error("Error al consultar cartas:", error);
+    document.getElementById("cartasResultado").innerText = "Error al consultar cartas. Revisa la consola para más detalles.";
+  }
 }
 
 async function consultarColeccionesPorCarta() {
   const id = document.getElementById("cartaId").value;
-  const res = await fetch(`${BASE_URL}/colecciones?cartaId=${id}`, { credentials: "include" });
-  const data = await res.json();
-  document.getElementById("coleccionesResultado").innerText = JSON.stringify(data, null, 2);
+
+  if (!id) {
+    document.getElementById("coleccionesResultado").innerText = "Por favor, ingresa un ID de carta.";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/colecciones/carta?cartaId=${id}`, { credentials: "include" });
+
+    if (!res.ok) {
+      const errorText = await res.json(); // Intenta leer el error como texto
+      document.getElementById("coleccionesResultado").innerText = `Error: ${errorText}`;
+      return;
+    }
+
+    const data = await res.json();
+    document.getElementById("coleccionesResultado").innerText = JSON.stringify(data, null, 2);
+  } catch (error) {
+    console.error("Error al consultar colecciones:", error);
+    document.getElementById("coleccionesResultado").innerText = "Error al consultar colecciones. Revisa la consola para más detalles.";
+  }
 }
 
 async function consultarCategorias() {
