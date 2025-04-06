@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consultas de Cartas</title>
+  <link rel="stylesheet" href="proyectodb-master/css/consultas.css" />
+</head>
+<body>
+  <h1>Consultas de Cartas</h1>
+
+  <section>
+    <h2>Cartas por Colección</h2>
+    <input type="number" id="coleccionId" placeholder="ID de colección" />
+    <button onclick="consultarCartasPorColeccion()">Consultar</button>
+    <pre id="cartasResultado"></pre>
+  </section>
+
+  <section>
+    <h2>Colecciones por Carta</h2>
+    <input type="number" id="cartaId" placeholder="ID de carta" />
+    <button onclick="consultarColeccionesPorCarta()">Consultar</button>
+    <pre id="coleccionesResultado"></pre>
+  </section>
+
+  <section>
+    <h2>Categorías por Colección</h2>
+    <input type="number" id="coleccionIdCat" placeholder="ID de colección" />
+    <button onclick="consultarCategorias()">Consultar</button>
+    <pre id="categoriasResultado"></pre>
+  </section>
+
+  <section>
+    <h2>Cartas por Color y Fecha</h2>
+    <input type="text" id="color" placeholder="Color" />
+    <input type="date" id="fechaInicio" />
+    <input type="date" id="fechaFin" />
+    <label>
+      <input type="checkbox" id="multicolor" />
+      ¿Multicolor?
+    </label>
+    <button onclick="consultarPorColorYFecha()">Consultar</button>
+    <pre id="colorResultado"></pre>
+  </section>
+
+  <script src="proyectodb-master/js/consultas.js"></script>
+</body>
+</html>

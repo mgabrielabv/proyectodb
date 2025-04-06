@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageContainer.textContent = 'Inicio de sesión exitoso.';
                 messageContainer.style.color = 'green';
                 setTimeout(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = 'consultas.html';
                 }, 2000);
             } else {
                 messageContainer.textContent = 'Inicio de sesión fallido. Verifica tus credenciales.';
