@@ -3,45 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Consultas de Cartas</title>
+  <title>Consultas de Cartas Magic</title>
   <link rel="stylesheet" href="proyectodb-master/css/consultas.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 <body>
-  <h1>Consultas de Cartas</h1>
+  <header class="app-header">
+    <h1>Consultas de Cartas Magic</h1>
+    <button id="logoutBtn" class="logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+    </button>
+  </header>
 
-  <section>
-    <h2>Cartas por Colección</h2>
-    <input type="number" id="coleccionId" placeholder="ID de colección" />
-    <button onclick="consultarCartasPorColeccion()">Consultar</button>
-    <pre id="cartasResultado"></pre>
-  </section>
+  <div class="query-container">
+    <section>
+      <h2>Cartas por Colección</h2>
+      <div class="input-group">
+        <label for="coleccionNombre">Nombre de colección:</label>
+        <input type="text" id="coleccionNombre" placeholder="Ej: Revolución de Kamigawa" />
+      </div>
+      <button onclick="consultarCartasPorColeccion()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="cartasResultado"></pre>
+    </section>
 
-  <section>
-    <h2>Colecciones por Carta</h2>
-    <input type="number" id="cartaId" placeholder="ID de carta" />
-    <button onclick="consultarColeccionesPorCarta()">Consultar</button>
-    <pre id="coleccionesResultado"></pre>
-  </section>
+    <section>
+      <h2>Colecciones por Carta</h2>
+      <div class="input-group">
+        <label for="cartaNombre">Nombre de carta:</label>
+        <input type="text" id="cartaNombre" placeholder="Ej: Dragón de Eiganjo" />
+      </div>
+      <button onclick="consultarColeccionesPorCarta()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="coleccionesResultado"></pre>
+    </section>
 
-  <section>
-    <h2>Categorías por Colección</h2>
-    <input type="number" id="coleccionIdCat" placeholder="ID de colección" />
-    <button onclick="consultarCategorias()">Consultar</button>
-    <pre id="categoriasResultado"></pre>
-  </section>
+    <section>
+      <h2>Categorías por Colección</h2>
+      <div class="input-group">
+        <label for="coleccionNombreCat">Nombre de colección:</label>
+        <input type="text" id="coleccionNombreCat" placeholder="Ej: Revolución de Kamigawa" />
+      </div>
+      <button onclick="consultarCategorias()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="categoriasResultado"></pre>
+    </section>
 
-  <section>
-    <h2>Cartas por Color y Fecha</h2>
-    <input type="text" id="color" placeholder="Color" />
-    <input type="date" id="fechaInicio" />
-    <input type="date" id="fechaFin" />
-    <label>
-      <input type="checkbox" id="multicolor" />
-      ¿Multicolor?
-    </label>
-    <button onclick="consultarPorColorYFecha()">Consultar</button>
-    <pre id="colorResultado"></pre>
-  </section>
+    <section>
+      <h2>Cartas por Color y Fecha</h2>
+      <div class="input-group">
+        <label for="color">Color:</label>
+        <select id="color">
+          <option value="">Selecciona un color</option>
+          <option value="blanco">Blanco</option>
+          <option value="azul">Azul</option>
+          <option value="negro">Negro</option>
+          <option value="rojo">Rojo</option>
+          <option value="verde">Verde</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="fechaInicio">Fecha inicio:</label>
+        <input type="date" id="fechaInicio" />
+      </div>
+      <div class="input-group">
+        <label for="fechaFin">Fecha fin:</label>
+        <input type="date" id="fechaFin" />
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="multicolor" />
+        <label for="multicolor">¿Multicolor?</label>
+      </div>
+      <button onclick="consultarPorColorYFecha()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="colorResultado"></pre>
+    </section>
+
+    <section>
+      <h2>Información de Mazo</h2>
+      <div class="input-group">
+        <label for="username">Nombre de usuario:</label>
+        <input type="text" id="username" placeholder="Ej: mago123" />
+      </div>
+      <div class="input-group">
+        <label for="mazoNombre">Nombre del mazo:</label>
+        <input type="text" id="mazoNombre" placeholder="Ej: Control Azul" />
+      </div>
+      <button onclick="consultarMazoInfo()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="mazoResultado"></pre>
+    </section>
+  </div>
 
   <script src="proyectodb-master/js/consultas.js"></script>
 </body>
