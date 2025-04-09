@@ -44,9 +44,13 @@ async function consultarCartasPorColeccion() {
 
     try {
         toggleLoading(button, true);
-        const response = await fetch(`${BASE_URL}/cartas?coleccionNombre=${encodeURIComponent(nombre)}`);
+        const response = await fetch(`${BASE_URL}/cartas/coleccion?coleccionNombre=${encodeURIComponent(nombre)}`);
         
         if (!response.ok) {
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("text/html")) {
+                throw new Error("El servidor devolvió una página HTML en lugar de JSON. Verifica el backend.");
+            }
             const errorData = await response.json();
             throw new Error(errorData.error || 'Error al obtener las cartas');
         }
@@ -72,7 +76,7 @@ async function consultarColeccionesPorCarta() {
 
     try {
         toggleLoading(button, true);
-        const response = await fetch(`${BASE_URL}/colecciones/carta?cartaNombre=${encodeURIComponent(nombre)}`);
+        const response = await fetch(`${BASE_URL}/colecciones/por-carta?cartaNombre=${encodeURIComponent(nombre)}`);
         
         if (!response.ok) {
             const errorData = await response.json();
@@ -100,7 +104,7 @@ async function consultarCategorias() {
 
     try {
         toggleLoading(button, true);
-        const response = await fetch(`${BASE_URL}/categorias?coleccionNombre=${encodeURIComponent(nombre)}`);
+        const response = await fetch(`${BASE_URL}/colecciones/categorias?coleccionNombre=${encodeURIComponent(nombre)}`);
         
         if (!response.ok) {
             const errorData = await response.json();
@@ -131,7 +135,7 @@ async function consultarPorColorYFecha() {
 
     try {
         toggleLoading(button, true);
-        let url = `${BASE_URL}/cartas-por-color?color=${color}&multicolor=${multicolor}`;
+        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${color}&multicolor=${multicolor}`;
         if (fechaInicio) url += `&fechaInicio=${fechaInicio}`;
         if (fechaFin) url += `&fechaFin=${fechaFin}`;
 
@@ -164,7 +168,7 @@ async function consultarMazoInfo() {
 
     try {
         toggleLoading(button, true);
-        const url = `${BASE_URL}/mazo-info?username=${encodeURIComponent(username)}&mazoNombre=${encodeURIComponent(mazoNombre)}`;
+        const url = `${BASE_URL}/mazos/por-jugador?username=${encodeURIComponent(username)}&mazoNombre=${encodeURIComponent(mazoNombre)}`;
         const response = await fetch(url);
         
         if (!response.ok) {

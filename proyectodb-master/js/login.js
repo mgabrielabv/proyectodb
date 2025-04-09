@@ -177,4 +177,29 @@ document.addEventListener('DOMContentLoaded', function() {
         loginForm.appendChild(container);
         return container;
     }
+
+    const logoutButton = document.getElementById('logout'); // Ensure there's a button with id 'logout'
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', async function() {
+            try {
+                const response = await fetch('http://localhost:4000/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert('Error al cerrar sesión: ' + (errorData.message || response.statusText));
+                    return;
+                }
+
+                alert('Sesión cerrada exitosamente.');
+                window.location.href = 'login.html'; // Redirect to login page
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+                alert('Error interno al cerrar sesión.');
+            }
+        });
+    }
 });
