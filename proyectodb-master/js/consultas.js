@@ -189,38 +189,36 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Aplicación de consultas Magic cargada correctamente');
 });
 
-async function consultarPorCombinacionColorYFecha() {
-    const colorCombinacion = document.getElementById("colorCombinacion").value;
-    const fechaInicio = formatToEnglishDate(document.getElementById("fechaInicioCombinacion").value);
-    const fechaFin = formatToEnglishDate(document.getElementById("fechaFinCombinacion").value);
-    const multicolor = document.getElementById("multicolorCombinacion").value;
-    const button = document.querySelector("button[onclick='consultarPorCombinacionColorYFecha()']");
+async function consultarPorColorYFecha() {
+    const color = document.getElementById("color").value;
+    const fechaInicio = formatToEnglishDate(document.getElementById("fechaInicio").value); // Modificado
+    const fechaFin = formatToEnglishDate(document.getElementById("fechaFin").value); // Modificado
+    const multicolor = document.getElementById("multicolor").checked ? 'true' : 'false';
+    const button = document.querySelector("button[onclick='consultarPorColorYFecha()']");
 
-    if (!colorCombinacion) {
-        mostrarError("combinacionColorResultado", "Por favor, selecciona una combinación de colores.");
+    if (!color) {
+        mostrarError("colorResultado", "Por favor, selecciona un color.");
         return;
     }
 
     try {
         toggleLoading(button, true);
-        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?combinacion=${encodeURIComponent(colorCombinacion)}`;
-        
+        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${color}&multicolor=${multicolor}`;
         if (fechaInicio) url += `&fechaInicio=${fechaInicio}`;
         if (fechaFin) url += `&fechaFin=${fechaFin}`;
-        if (multicolor !== 'all') url += `&multicolor=${multicolor}`;
 
         const response = await fetch(url);
         
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || 'Error al obtener las cartas por combinación de colores y fecha');
+            throw new Error(errorData.error || 'Error al obtener las cartas por color');
         }
 
         const data = await response.json();
-        mostrarResultado("combinacionColorResultado", data);
+        mostrarResultado("colorResultado", data);
     } catch (error) {
         console.error("Error:", error);
-        mostrarError("combinacionColorResultado", `Error: ${error.message}`);
+        mostrarError("colorResultado", `Error: ${error.message}`);
     } finally {
         toggleLoading(button, false);
     }
