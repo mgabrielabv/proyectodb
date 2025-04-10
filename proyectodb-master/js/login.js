@@ -44,7 +44,7 @@ async function handleLogin() {
         // Datos para enviar al servidor
         const loginData = { email, password };
         if (isAdmin) {
-            loginData.adminCode = adminCode;
+            loginData.admin_code = adminCode; // Ensure the key matches the back-end expectation
         }
 
         // 1. Verificar credenciales y código admin si aplica
@@ -66,13 +66,15 @@ async function handleLogin() {
         if (isAdmin && data.isAdmin) {
             showMessage('Acceso administrativo concedido', 'green');
             setTimeout(() => {
-                window.location.href = 'admin.html';
+                window.location.href = 'admin.html'; // Redirigir a admin.html
             }, 1500);
-        } else {
+        } else if (!isAdmin) {
             showMessage('Inicio de sesión exitoso', 'green');
             setTimeout(() => {
-                window.location.href = 'consultas.html';
+                window.location.href = 'consultas.html'; // Redirigir a consultas.html
             }, 1500);
+        } else {
+            showMessage('No tiene permisos de administrador', 'red');
         }
 
     } catch (error) {

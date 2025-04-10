@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const BASE_URL = "http://localhost:4000"; // Define BASE_URL
+
     // Elementos del DOM
     const tableNameInput = document.getElementById('tableName');
     const getTableBtn = document.getElementById('getTableBtn');
@@ -16,20 +18,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelFormBtn = document.getElementById('cancelFormBtn');
     const closeModal = document.querySelector('.close-modal');
 
+    // Botón de cerrar sesión
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', cerrarSesion);
+    }
+
     // Variables de estado
     let currentAction = '';
     let currentTable = '';
     let currentRecordId = '';
 
     // Event Listeners
-    getTableBtn.addEventListener('click', showTableRecords);
-    createRecordBtn.addEventListener('click', showCreateForm);
-    searchUserBtn.addEventListener('click', searchUser);
-    
-    submitFormBtn.addEventListener('click', handleFormSubmit);
-    cancelFormBtn.addEventListener('click', closeModalWindow);
-    closeModal.addEventListener('click', closeModalWindow);
-    
+    if (getTableBtn) {
+        getTableBtn.addEventListener('click', showTableRecords);
+    }
+    if (createRecordBtn) {
+        createRecordBtn.addEventListener('click', showCreateForm);
+    }
+    if (searchUserBtn) {
+        searchUserBtn.addEventListener('click', searchUser);
+    }
+    if (submitFormBtn) {
+        submitFormBtn.addEventListener('click', handleFormSubmit);
+    }
+    if (cancelFormBtn) {
+        cancelFormBtn.addEventListener('click', closeModalWindow);
+    }
+    if (closeModal) {
+        closeModal.addEventListener('click', closeModalWindow);
+    }
+
     // Cerrar modal al hacer clic fuera
     window.addEventListener('click', function(event) {
         if (event.target === magicModal) {
@@ -225,6 +244,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 'error'
             );
         }
+    }
+
+    async function cerrarSesion() {
+        try {
+            const response = await fetch(`${BASE_URL}/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                window.location.href = 'login.html';
+            } else {
+                const errorData = await response.json();
+                console.error('Error al cerrar sesión:', errorData.error);
+                showError('Error al cerrar sesión. Intenta nuevamente.');
+            }
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+            showError('Error de conexión al cerrar sesión');
+        }
+    }
+
+    function showError(message) {
+        alert(message); // Replace with a simple alert for error handling
     }
 
     // Funciones auxiliares
