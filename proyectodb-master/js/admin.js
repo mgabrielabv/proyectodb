@@ -18,8 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitFormBtn = document.getElementById('submitFormBtn');
     const cancelFormBtn = document.getElementById('cancelFormBtn');
     const closeModal = document.querySelector('.close-modal');
+     
+    // Botón de cerrar sesión
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', cerrarSesion);
+        }
 
-    // Variables de estado
+    // Variables de estado/
     let currentAction = '';
     let currentTable = '';
     let currentRecordId = '';
