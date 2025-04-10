@@ -9,13 +9,21 @@
 <body>
     <div class="login-container">
         <form id="loginForm">
-            <img src="./proyectodb-master/img/user.png" alt="user.img">
+            <img src="./proyectodb-master/img/user.png" alt="user.img" class="login-icon">
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="ejemplo@email.com" required>
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Contraseña" required>
-        
-            <div id="adminCodeContainer" style="display: none;">
+            
+            <!-- Checkbox para mostrar campo de admin -->
+            <div class="form-group" style="margin-top: 10px;">
+                <label>
+                    <input type="checkbox" id="adminCheckbox"> ¿Eres administrador?
+                </label>
+            </div>
+            
+            <!-- Campo de código admin (oculto inicialmente) -->
+            <div id="adminCodeContainer" style="display: none; width: 80%;">
                 <label for="adminCode">Código de Administrador</label>
                 <input type="password" id="adminCode" placeholder="Ingrese código admin">
             </div>

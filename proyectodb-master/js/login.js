@@ -1,9 +1,18 @@
 // Referencias a los elementos del DOM
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
+const adminCheckbox = document.getElementById('adminCheckbox');
+const adminCodeContainer = document.getElementById('adminCodeContainer');
+const adminCodeInput = document.getElementById('adminCode');
 const submitButton = document.getElementById('submit');
 const loginForm = document.getElementById('loginForm');
 const messageElement = document.getElementById('message');
+
+// Mostrar/ocultar campo de código admin
+adminCheckbox.addEventListener('change', function() {
+    adminCodeContainer.style.display = this.checked ? 'block' : 'none';
+    if (!this.checked) adminCodeInput.value = '';
+});
 
 // Manejador del evento submit del formulario
 loginForm.addEventListener('submit', async function(e) {
@@ -14,6 +23,8 @@ loginForm.addEventListener('submit', async function(e) {
 async function handleLogin() {
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
+    const isAdmin = adminCheckbox.checked;
+    const adminCode = isAdmin ? adminCodeInput.value.trim() : null;
 
     // Validación básica
     if (!email || !password) {
@@ -21,70 +32,51 @@ async function handleLogin() {
         return;
     }
 
+    if (isAdmin && !adminCode) {
+        showMessage('Por favor ingrese el código de administrador', 'red');
+        return;
+    }
+
     setLoadingState(true);
     messageElement.textContent = '';
 
     try {
-        // 1. Verificar credenciales básicas
-        const loginResponse = await fetch('http://localhost:4000/login', {
+        // Datos para enviar al servidor
+        const loginData = { email, password };
+        if (isAdmin) {
+            loginData.adminCode = adminCode;
+        }
+
+        // 1. Verificar credenciales y código admin si aplica
+        const response = await fetch('http://localhost:4000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify(loginData)
         });
 
-        const loginData = await loginResponse.json();
+        const data = await response.json();
 
-        if (!loginResponse.ok) {
-            throw new Error(loginData.message || 'Error en el inicio de sesión');
+        if (!response.ok) {
+            throw new Error(data.message || 'Error en el inicio de sesión');
         }
 
-        // 2. Si es admin, preguntar si quiere ingresar como admin
-        if (loginData.isAdmin) {
-            const wantsAdminAccess = confirm('¿Desea ingresar como administrador?');
-            
-            if (wantsAdminAccess) {
-                const adminCode = prompt('Ingrese su código de administrador:');
-                
-                if (adminCode) {
-                    // 3. Verificar código admin
-                    const codeResponse = await fetch('http://localhost:4000/verify-admin-code', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ 
-                            email,
-                            admin_code: adminCode 
-                        })
-                    });
-
-                    const codeData = await codeResponse.json();
-
-                    if (!codeResponse.ok) {
-                        throw new Error(codeData.message || 'Código incorrecto');
-                    }
-
-                    // 4. Redirigir a admin.html si el código es correcto
-                    showMessage('Acceso concedido como administrador', 'green');
-                    setTimeout(() => {
-                        window.location.href = 'admin.html';
-                    }, 1500);
-                    return;
-                } else {
-                    throw new Error('Debe ingresar el código de administrador');
-                }
-            }
+        // 2. Redirigir según el tipo de usuario
+        if (isAdmin && data.isAdmin) {
+            showMessage('Acceso administrativo concedido', 'green');
+            setTimeout(() => {
+                window.location.href = 'admin.html';
+            }, 1500);
+        } else {
+            showMessage('Inicio de sesión exitoso', 'green');
+            setTimeout(() => {
+                window.location.href = 'consultas.html';
+            }, 1500);
         }
-
-        // 5. Redirigir a consultas.html para usuarios normales o admins que no ingresaron código
-        showMessage('Inicio de sesión exitoso', 'green');
-        setTimeout(() => {
-            window.location.href = 'consultas.html';
-        }, 1500);
 
     } catch (error) {
+        console.error('Error:', error);
         showMessage(error.message, 'red');
     } finally {
         setLoadingState(false);

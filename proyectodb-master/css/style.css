@@ -1,70 +1,134 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Cinzel Decorative', cursive;
 }
 
-body{
+body {
     width: 100%;
     height: 100vh;
+    background: radial-gradient(circle at top center, #1a1a2e, #0f0f1c);
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
+    overflow: hidden;
+    position: relative;
 }
 
-form{
-    width: 300px;
-    height: 350px;
+/* Partículas mágicas en el fondo */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/magic_particles.gif');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+}
+
+form {
+    width: 340px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #fff;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    border-radius: 16px;
+    padding: 30px 20px;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
     flex-direction: column;
-    box-shadow: 10px 4px 10px 10px #ccc;
-    border-radius: 20px;
-    padding-top: 30px;
+    align-items: center;
+    animation: fadeInUp 1s ease;
 }
 
-form img{
-    width: 90px;
-    height: 90px;
-    margin-bottom: 10px;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-form input[type="email"], 
-form input[type="password"]{
-    outline: 0;
-    border: 1px solid skyblue;
+.login-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px gold);
+}
+
+form label {
+    align-self: flex-start;
+    margin-left: 10%;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+form input[type="email"],
+form input[type="password"] {
     width: 80%;
     padding: 10px;
     margin: 5px 0;
-}
-
-form label{
-    font-weight: 500;
-    padding: 5px 0;
-    align-self: flex-start;
-    margin-left: 10%;
-}
-
-form button{
-    outline: 0;
-    border: 0;
-    background-color: royalblue;
-    border-radius: 20px;
-    cursor: pointer;
-    width: 80%;
-    padding: 12px;
-    transition: all .3s ease-in-out;
-    text-align: center;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #262626;
     color: white;
-    font-weight: 500;
-    margin-top: 5px;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
-form button:hover{
-   opacity: .75;
+#adminCodeContainer {
+    display: none;
+    width: 80%;
+    animation: fadeIn 0.3s ease;
 }
+
+#adminCodeContainer input {
+    background: #1e1e2f;
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+form button {
+    background: linear-gradient(145deg, #5d00ff, #8f00ff);
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    margin-top: 15px;
+    color: white;
+    font-weight: bold;
+    width: 80%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px violet;
+}
+
 .spinner {
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
@@ -82,20 +146,27 @@ form button:hover{
     100% { transform: rotate(360deg); }
 }
 
-.login-icon {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 20px;
+#message {
+    margin-top: 15px;
+    font-size: 14px;
+    min-height: 20px;
+    color: #ffd700;
+    text-shadow: 1px 1px 2px black;
 }
 
-.form-group {
-    width: 80%;
-    margin: 0 auto 15px;
-    text-align: left;
+.register-option {
+    text-align: center;
+    margin-top: 20px;
+    color: #ccc;
+    font-size: 14px;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
+.register-option a {
+    color: #a6e1fa;
+    text-decoration: underline;
+}
+
+input::placeholder {
+    color: #aaa;
+    font-style: italic;
 }
