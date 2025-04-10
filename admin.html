@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="proyectodb-master/css/admin.css">
 </head>
@@ -12,22 +13,26 @@
             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
         </button>
     </header>
+
     <div class="admin-container">
         <form class="admin-form">
             <h1 class="admin-title">Panel de Administración</h1>
-
-            <div class="section">
-                <h2>Gestión de Tablas</h2>
-                <div class="form-group">
-                    <label for="tableName">Nombre de la Tabla:</label>
-                    <input type="text" id="tableName" placeholder="Ej: usuarios">
-                    <div class="button-group">
-                        <button type="button" id="showRecords">Mostrar Registros</button>
-                        <button type="button" id="createRecord">Crear Registro</button>
-                    </div>
-                </div>
+            
+            <!-- Sección para ingresar el nombre de la tabla -->
+            <div class="input-group">
+                <label for="tabla">Tabla:</label>
+                <input type="text" id="tabla" placeholder="Ej. cartas" />
+            </div>
+            
+            <!-- Botones de operación sobre los registros -->
+            <div class="button-group">
+                <button id="insertBtn">Insertar</button>
+                <button id="viewBtn">Ver</button>
+                <button id="updateBtn">Actualizar</button>
+                <button id="deleteBtn">Eliminar</button>
             </div>
 
+            <!-- Sección de búsqueda de usuario -->
             <div class="section">
                 <h2>Búsqueda de Usuario</h2>
                 <div class="form-group">
@@ -36,9 +41,25 @@
                     <button type="button" id="searchButton">Buscar</button>
                 </div>
             </div>
+
+            <!-- Contenedor de mensajes -->
             <div id="message-container"></div>
         </form>
     </div>
-    <script src="./proyectodb-master/js/admin.js"></script>
+
+    <!-- Modal para operaciones dinámicas (Insertar, Actualizar) -->
+    <div id="magicModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <form id="dynamicForm">
+                <!-- Formulario dinámico se insertará aquí -->
+            </form>
+            <button id="submitFormBtn">Enviar</button>
+            <button id="cancelFormBtn">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="proyectodb-master/js/admin.js"></script>
 </body>
 </html>
