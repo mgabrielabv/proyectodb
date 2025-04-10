@@ -353,3 +353,39 @@ async function consultarHistorialUsuario() {
         toggleLoading(button, false);
     }
 }
+
+async function consultarPorCombinacionColorYFecha() {
+    const colorCombinacion = document.getElementById("colorCombinacion").value;
+    const fechaInicio = document.getElementById("fechaInicioCombinacion").value;
+    const fechaFin = document.getElementById("fechaFinCombinacion").value;
+    const multicolor = document.getElementById("multicolorCombinacion").value;
+    const button = document.querySelector("button[onclick='consultarPorCombinacionColorYFecha()']");
+
+    if (!colorCombinacion) {
+        mostrarError("combinacionColorResultado", "Por favor, selecciona una combinación de colores.");
+        return;
+    }
+
+    try {
+        toggleLoading(button, true);
+        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${encodeURIComponent(colorCombinacion)}`;
+        if (fechaInicio) url += `&fechaInicio=${encodeURIComponent(fechaInicio)}`;
+        if (fechaFin) url += `&fechaFin=${encodeURIComponent(fechaFin)}`;
+        if (multicolor !== "all") url += `&multicolor=${encodeURIComponent(multicolor)}`;
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al obtener las cartas por combinación de colores');
+        }
+
+        const data = await response.json();
+        mostrarResultado("combinacionColorResultado", data);
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarError("combinacionColorResultado", `Error: ${error.message}`);
+    } finally {
+        toggleLoading(button, false);
+    }
+}
