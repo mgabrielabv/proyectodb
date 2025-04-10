@@ -39,7 +39,28 @@
       </button>
       <pre id="coleccionesResultado"></pre>
     </section>
-
+    <section>
+      <h2>Categorías de Cartas por Colección</h2>
+      <div class="input-group">
+        <label for="coleccionNombreCategorias">Nombre de colección:</label>
+        <input type="text" id="coleccionNombreCategorias" placeholder="Ej: Core Set 2021" />
+      </div>
+      <button onclick="consultarCategoriasCartas()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="categoriasCartasResultado"></pre>
+    </section>
+    <section>
+      <h2>Historial de Transacciones del Usuario</h2>
+      <div class="input-group">
+        <label for="usernameHistorial">Nombre de usuario:</label>
+        <input type="text" id="usernameHistorial" placeholder="Ej: elProf" />
+      </div>
+      <button onclick="consultarHistorialUsuario()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <div id="historialResultado" class="resultado-tabla"></div>
+    </section>
     <section>
       <h2>Categorías por Colección</h2>
       <div class="input-group">

@@ -253,3 +253,104 @@ async function consultarOfertasUsuario() {
         toggleLoading(button, false);
     }
 }
+async function consultarCategoriasCartas() {
+    const nombre = document.getElementById("coleccionNombreCategorias").value.trim();
+    const button = document.querySelector("button[onclick='consultarCategoriasCartas()']");
+
+    if (!nombre) {
+        mostrarError("categoriasCartasResultado", "Por favor, ingresa un nombre de colección válido.");
+        return;
+    }
+
+    try {
+        toggleLoading(button, true);
+        const response = await fetch(`${BASE_URL}/colecciones/categorias?coleccionNombre=${encodeURIComponent(nombre)}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al obtener las categorías de cartas');
+        }
+
+        if (data.data && data.data.length > 0) {
+            const resultadoFormateado = data.data.map(cat => {
+                return `${cat.categoria}: ${cat.cantidad} cartas`;
+            }).join('\n');
+            mostrarResultado("categoriasCartasResultado", resultadoFormateado);
+        } else {
+            mostrarError("categoriasCartasResultado", "No se encontraron categorías para esta colección");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarError("categoriasCartasResultado", `Error: ${error.message}`);
+    } finally {
+        toggleLoading(button, false);
+    }
+}
+async function consultarHistorialUsuario() {
+    const username = document.getElementById("usernameHistorial").value.trim();
+    const button = document.querySelector("button[onclick='consultarHistorialUsuario()']");
+    const resultadoDiv = document.getElementById("historialResultado");
+
+    if (!username) {
+        mostrarError("historialResultado", "Por favor, ingresa un nombre de usuario.");
+        return;
+    }
+
+    try {
+        toggleLoading(button, true);
+        resultadoDiv.innerHTML = '<div class="loading-message">Cargando transacciones...</div>';
+
+        const response = await fetch(`${BASE_URL}/usuarios/historial-transacciones?username=${encodeURIComponent(username)}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al obtener el historial');
+        }
+
+        const { data } = await response.json();
+
+        resultadoDiv.innerHTML = ''; // Limpiar mensaje de carga
+
+        if (!data || data.length === 0) {
+            resultadoDiv.innerHTML = '<div class="info">No se encontraron transacciones para este usuario</div>';
+            return;
+        }
+
+        // Crear tabla de resultados
+        const tablaHTML = `
+            <table class="tabla-transacciones">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Operación</th>
+                        <th>Monto</th>
+                        <th>Contraparte</th>
+                        <th>Tipo</th>
+                        <th>Contacto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(trans => `
+                        <tr>
+                            <td>${trans.producto || 'N/A'}</td>
+                            <td><span class="badge ${trans.tipo === 'Venta' ? 'badge-venta' : 'badge-compra'}">${trans.tipo}</span></td>
+                            <td class="monto">${trans.monto} €</td>
+                            <td>${trans.contraparte?.nombre || 'Desconocido'}</td>
+                            <td>${trans.contraparte?.tipo || 'N/A'}</td>
+                            <td>${trans.contraparte?.contacto || 'No disponible'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <div class="resumen">Total de transacciones: ${data.length}</div>
+        `;
+
+        resultadoDiv.innerHTML = tablaHTML;
+
+    } catch (error) {
+        console.error("Error en consultarHistorialUsuario:", error);
+        resultadoDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    } finally {
+        toggleLoading(button, false);
+    }
+}
