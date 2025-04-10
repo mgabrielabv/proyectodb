@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+
+html {
+    background-color: #0b0002;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: url('../img/woOos0oOo0dislaniIidnBbalL112_1600x1080.png') no-repeat center center / cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-family: 'Cinzel Decorative', cursive;
+    position: relative;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/magic_particles.gif');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.admin-container {
+    position: relative;
+    z-index: 1;
+    width: 450px;
+    max-width: 100%;
+    padding: 40px 0;
+}
+
+.admin-form {
+    background: rgba(0, 0, 0, 0.75);
+    border: 2px solid #fff;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+    border-radius: 16px;
+    padding: 35px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    animation: fadeInUp 1s ease;
+}
+
+.admin-title {
+    font-size: 2rem;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 0 12px gold;
+}
+
+.section h2 {
+    margin-bottom: 10px;
+    color: #fff;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+    font-size: 1.3rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(38, 38, 38, 0.8);
+    color: white;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.15);
+    font-size: 0.95rem;
+}
+
+input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+input:focus {
+    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.4),
+                0 0 12px rgba(255, 215, 0, 0.3);
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+button {
+    background: linear-gradient(145deg, #a71c2a, #5E2129);
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(145deg, #5E2129, #a71c2a);
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+}
+
+#message-container {
+    text-align: center;
+    color: #ffd700;
+    font-size: 0.9rem;
+    min-height: 20px;
+    text-shadow: 1px 1px 2px black;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-form {
+        padding: 25px 20px;
+    }
+
+    .admin-title {
+        font-size: 1.7rem;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}
