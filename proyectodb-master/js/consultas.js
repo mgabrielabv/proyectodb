@@ -121,41 +121,6 @@ async function consultarCategorias() {
     }
 }
 
-async function consultarPorColorYFecha() {
-    const color = document.getElementById("color").value;
-    const fechaInicio = formatToEnglishDate(document.getElementById("fechaInicio").value); // Modificado
-    const fechaFin = formatToEnglishDate(document.getElementById("fechaFin").value); // Modificado
-    const multicolor = document.getElementById("multicolor").checked ? 'true' : 'false';
-    const button = document.querySelector("button[onclick='consultarPorColorYFecha()']");
-
-    if (!color) {
-        mostrarError("colorResultado", "Por favor, selecciona un color.");
-        return;
-    }
-
-    try {
-        toggleLoading(button, true);
-        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${color}&multicolor=${multicolor}`;
-        if (fechaInicio) url += `&fechaInicio=${fechaInicio}`;
-        if (fechaFin) url += `&fechaFin=${fechaFin}`;
-
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Error al obtener las cartas por color');
-        }
-
-        const data = await response.json();
-        mostrarResultado("colorResultado", data);
-    } catch (error) {
-        console.error("Error:", error);
-        mostrarError("colorResultado", `Error: ${error.message}`);
-    } finally {
-        toggleLoading(button, false);
-    }
-}
-
 async function consultarMazoInfo() {
     const username = document.getElementById("username").value.trim();
     const mazoNombre = document.getElementById("mazoNombre").value.trim();
@@ -223,3 +188,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('Aplicación de consultas Magic cargada correctamente');
 });
+
+async function consultarCartasPorColorYFecha() {
+    const color = document.getElementById("colorNuevo").value;
+    const fechaInicio = formatToEnglishDate(document.getElementById("fechaInicioNuevo").value);
+    const fechaFin = formatToEnglishDate(document.getElementById("fechaFinNuevo").value);
+    const multicolor = document.getElementById("multicolorNuevo").value;
+    const button = document.querySelector("button[onclick='consultarCartasPorColorYFecha()']");
+
+    if (!color) {
+        mostrarError("colorFechaResultado", "Por favor, selecciona un color.");
+        return;
+    }
+
+    try {
+        toggleLoading(button, true);
+        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${color}`;
+        if (fechaInicio) url += `&fechaInicio=${fechaInicio}`;
+        if (fechaFin) url += `&fechaFin=${fechaFin}`;
+        if (multicolor !== 'all') url += `&multicolor=${multicolor}`;
+
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al obtener las cartas por color y fecha');
+        }
+
+        const data = await response.json();
+        mostrarResultado("colorFechaResultado", data);
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarError("colorFechaResultado", `Error: ${error.message}`);
+    } finally {
+        toggleLoading(button, false);
+    }
+}
+
+
+async function consultarOfertasUsuario() {
+    const username = document.getElementById("usernameOfertas").value.trim();
+    const button = document.querySelector("button[onclick='consultarOfertasUsuario()']");
+
+    if (!username) {
+        mostrarError("ofertasResultado", "Por favor, ingresa un nombre de usuario.");
+        return;
+    }
+
+    try {
+        toggleLoading(button, true);
+        const response = await fetch(`${BASE_URL}/usuarios/ofertas-estadisticas?username=${encodeURIComponent(username)}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al obtener las ofertas del usuario');
+        }
+
+        const data = await response.json();
+        mostrarResultado("ofertasResultado", data);
+    } catch (error) {
+        console.error("Error:", error);
+        mostrarError("ofertasResultado", `Error: ${error.message}`);
+    } finally {
+        toggleLoading(button, false);
+    }
+}

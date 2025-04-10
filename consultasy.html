@@ -53,16 +53,63 @@
     </section>
 
     <section>
-      <h2>Cartas por Combinación de Colores y Fecha</h2>
+      <h2>Cartas por Color y Fecha</h2>
       <div class="input-group">
-        <label for="colorCombinacion">Combinación de colores:</label>
-        <select id="colorCombinacion">
+        <label for="color">Color:</label>
+        <select id="color">
+          <option value="">Selecciona un color</option>
+          <option value="blanco">Blanco</option>
+          <option value="azul">Azul</option>
+          <option value="negro">Negro</option>
+          <option value="rojo">Rojo</option>
+          <option value="verde">Verde</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="fechaInicio">Fecha inicio:</label>
+        <input type="date" id="fechaInicio" />
+      </div>
+      <div class="input-group">
+        <label for="fechaFin">Fecha fin:</label>
+        <input type="date" id="fechaFin" />
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="multicolor" />
+        <label for="multicolor">¿Multicolor?</label>
+      </div>
+      <button onclick="consultarPorColorYFecha()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="colorResultado"></pre>
+    </section>
+
+    <section>
+      <h2>Información de Mazo</h2>
+      <div class="input-group">
+        <label for="username">Nombre de usuario:</label>
+        <input type="text" id="username" placeholder="Ej: mago123" />
+      </div>
+      <div class="input-group">
+        <label for="mazoNombre">Nombre del mazo:</label>
+        <input type="text" id="mazoNombre" placeholder="Ej: Control Azul" />
+      </div>
+      <button onclick="consultarMazoInfo()">
+        <i class="fas fa-search"></i> Consultar
+      </button>
+      <pre id="mazoResultado"></pre>
+    </section>
+
+    <section>
+      <h2>Cartas por Color y Fecha</h2>
+      <div class="input-group">
+        <label for="color">Combinación de colores:</label>
+        <select id="color">
           <option value="">Selecciona una combinación</option>
-          <option value="blanco">Mono Blanco (Monocolor)</option>
-          <option value="azul">Mono Azul (Monocolor)</option>
-          <option value="negro">Mono Negro (Monocolor)</option>
-          <option value="rojo">Mono Rojo (Monocolor)</option>
-          <option value="verde">Mono Verde (Monocolor)</option>
+          <option value="blanco"> Mono Blanco (Monocolor)</option>
+          <option value="azul"> Mono Azul (Monocolor)</option>
+          <option value="negro"> Mono Negro (Monocolor)</option>
+          <option value="rojo"> Mono Rojo (Monocolor)</option>
+          <option value="verde"> Mono Verde (Monocolor)</option>
           <option value="blanco/azul">Azorius (Blanco/Azul)</option>
           <option value="azul/negro">Dimir (Azul/Negro)</option>
           <option value="negro/rojo">Rakdos (Negro/Rojo)</option>
@@ -92,41 +139,21 @@
         </select>
       </div>
       <div class="input-group">
-        <label for="fechaInicioCombinacion">Fecha inicio:</label>
-        <input type="date" id="fechaInicioCombinacion" />
+        <label for="fechaInicio">Fecha inicio:</label>
+        <input type="date" id="fechaInicio" />
       </div>
       <div class="input-group">
-        <label for="fechaFinCombinacion">Fecha fin:</label>
-        <input type="date" id="fechaFinCombinacion" />
+        <label for="fechaFin">Fecha fin:</label>
+        <input type="date" id="fechaFin" />
       </div>
-      <div class="input-group">
-        <label for="multicolorCombinacion">Filtrar multicolor:</label>
-        <select id="multicolorCombinacion">
-          <option value="all">Mostrar todos</option>
-          <option value="true">Solo multicolor</option>
-          <option value="false">Excluir multicolor</option>
-        </select>
+      <div class="checkbox-group">
+        <input type="checkbox" id="multicolor" />
+        <label for="multicolor">¿Multicolor?</label>
       </div>
-      <button onclick="consultarPorCombinacionColorYFecha()">
+      <button onclick="consultarPorColorYFecha()">
         <i class="fas fa-search"></i> Consultar
       </button>
-      <pre id="combinacionColorResultado"></pre>
-    </section>
-
-    <section>
-      <h2>Información de Mazo</h2>
-      <div class="input-group">
-        <label for="username">Nombre de usuario:</label>
-        <input type="text" id="username" placeholder="Ej: mago123" />
-      </div>
-      <div class="input-group">
-        <label for="mazoNombre">Nombre del mazo:</label>
-        <input type="text" id="mazoNombre" placeholder="Ej: Control Azul" />
-      </div>
-      <button onclick="consultarMazoInfo()">
-        <i class="fas fa-search"></i> Consultar
-      </button>
-      <pre id="mazoResultado"></pre>
+      <pre id="colorResultado"></pre>
     </section>
   
     <section>
@@ -168,6 +195,7 @@
       }
     }
 
+    // Nueva función para formato de fecha inglés (YYYY-MM-DD)
     function formatToEnglishDate(dateString) {
       if (!dateString) return '';
       const date = new Date(dateString);
@@ -265,37 +293,36 @@
       }
     }
 
-    async function consultarPorCombinacionColorYFecha() {
-      const color = document.getElementById("colorCombinacion").value;
-      const fechaInicio = formatToEnglishDate(document.getElementById("fechaInicioCombinacion").value);
-      const fechaFin = formatToEnglishDate(document.getElementById("fechaFinCombinacion").value);
-      const multicolor = document.getElementById("multicolorCombinacion").value;
-      const button = document.querySelector("button[onclick='consultarPorCombinacionColorYFecha()']");
+    async function consultarPorColorYFecha() {
+      const color = document.getElementById("color").value;
+      const fechaInicio = formatToEnglishDate(document.getElementById("fechaInicio").value);
+      const fechaFin = formatToEnglishDate(document.getElementById("fechaFin").value);
+      const multicolor = document.getElementById("multicolor").checked ? 'true' : 'false';
+      const button = document.querySelector("button[onclick='consultarPorColorYFecha()']");
 
       if (!color) {
-        mostrarError("combinacionColorResultado", "Por favor, selecciona una combinación de colores.");
+        mostrarError("colorResultado", "Por favor, selecciona un color.");
         return;
       }
 
       try {
         toggleLoading(button, true);
-        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${color}`;
+        let url = `${BASE_URL}/cartas/filtrarPorColorFecha?color=${color}&multicolor=${multicolor}`;
         if (fechaInicio) url += `&fechaInicio=${fechaInicio}`;
         if (fechaFin) url += `&fechaFin=${fechaFin}`;
-        if (multicolor !== 'all') url += `&multicolor=${multicolor}`;
 
         const response = await fetch(url);
         
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || 'Error al obtener las cartas por combinación de colores');
+          throw new Error(errorData.error || 'Error al obtener las cartas por color');
         }
 
         const data = await response.json();
-        mostrarResultado("combinacionColorResultado", data);
+        mostrarResultado("colorResultado", data);
       } catch (error) {
         console.error("Error:", error);
-        mostrarError("combinacionColorResultado", `Error: ${error.message}`);
+        mostrarError("colorResultado", `Error: ${error.message}`);
       } finally {
         toggleLoading(button, false);
       }
@@ -331,6 +358,9 @@
       }
     }
 
+    
+
+    // Nueva función para consultar ofertas y estadísticas de usuario (consulta 7)
     async function consultarOfertasUsuario() {
       const username = document.getElementById("usernameOfertas").value.trim();
       const button = document.querySelector("button[onclick='consultarOfertasUsuario()']");
@@ -342,7 +372,7 @@
 
       try {
         toggleLoading(button, true);
-        const response = await fetch(`${BASE_URL}/usuarios/ofertas-estadisticas?username=${encodeURIComponent(username)}`);
+        const response = await fetch(`${BASE_URL}/usuario/ofertas?username=${encodeURIComponent(username)}`);
         
         if (!response.ok) {
           const errorData = await response.json();
