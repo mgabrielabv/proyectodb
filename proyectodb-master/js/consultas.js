@@ -225,7 +225,6 @@ async function consultarCartasPorColorYFecha() {
     }
 }
 
-
 async function consultarOfertasUsuario() {
     const username = document.getElementById("usernameOfertas").value.trim();
     const button = document.querySelector("button[onclick='consultarOfertasUsuario()']");
@@ -253,6 +252,7 @@ async function consultarOfertasUsuario() {
         toggleLoading(button, false);
     }
 }
+
 async function consultarCategoriasCartas() {
     const nombre = document.getElementById("coleccionNombreCategorias").value.trim();
     const button = document.querySelector("button[onclick='consultarCategoriasCartas()']");
@@ -271,11 +271,10 @@ async function consultarCategoriasCartas() {
             throw new Error(errorData.error || 'Error al obtener las categorías de cartas');
         }
 
-        if (data.data && data.data.length > 0) {
-            const resultadoFormateado = data.data.map(cat => {
-                return `${cat.categoria}: ${cat.cantidad} cartas`;
-            }).join('\n');
-            mostrarResultado("categoriasCartasResultado", resultadoFormateado);
+        const { data } = await response.json(); // Extract 'data' from the response JSON
+
+        if (data && data.length > 0) {
+            mostrarResultado("categoriasCartasResultado", data); // Pass the JSON data directly
         } else {
             mostrarError("categoriasCartasResultado", "No se encontraron categorías para esta colección");
         }
@@ -286,6 +285,7 @@ async function consultarCategoriasCartas() {
         toggleLoading(button, false);
     }
 }
+
 async function consultarHistorialUsuario() {
     const username = document.getElementById("usernameHistorial").value.trim();
     const button = document.querySelector("button[onclick='consultarHistorialUsuario()']");
