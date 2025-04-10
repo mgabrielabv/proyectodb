@@ -36,7 +36,8 @@ function formatToEnglishDate(dateString) {
 async function consultarCartasPorColeccion() {
     const nombre = document.getElementById("coleccionNombre").value.trim();
     const button = document.querySelector("button[onclick='consultarCartasPorColeccion()']");
-    
+    const resultadoDiv = document.getElementById("cartasResultado");
+
     if (!nombre) {
         mostrarError("cartasResultado", "Por favor, ingresa un nombre de colección válido.");
         return;
@@ -55,8 +56,22 @@ async function consultarCartasPorColeccion() {
             throw new Error(errorData.error || 'Error al obtener las cartas');
         }
 
-        const data = await response.json();
-        mostrarResultado("cartasResultado", data);
+        const { data } = await response.json();
+
+        // Clear previous results
+        resultadoDiv.innerHTML = '';
+
+        if (data && data.length > 0) {
+            // Create a list of cards
+            const listHTML = `
+                <ul>
+                    ${data.map(carta => `<li>Nombre: ${carta.nombre}, Rareza: ${carta.rareza}</li>`).join('')}
+                </ul>
+            `;
+            resultadoDiv.innerHTML = listHTML;
+        } else {
+            resultadoDiv.innerHTML = '<div class="info">No se encontraron cartas para esta colección</div>';
+        }
     } catch (error) {
         console.error("Error:", error);
         mostrarError("cartasResultado", `Error: ${error.message}`);
@@ -331,6 +346,7 @@ async function consultarHistorialUsuario() {
                 <tbody>
                     ${data.map(trans => `
                         <tr>
+                            <td>${trans.producto || 'N/A'}</td>
                             <td>${trans.producto || 'N/A'}</td>
                             <td><span class="badge ${trans.tipo === 'Venta' ? 'badge-venta' : 'badge-compra'}">${trans.tipo}</span></td>
                             <td class="monto">${trans.monto} €</td>

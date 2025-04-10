@@ -191,21 +191,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch(`/api/admin/users/${username}`, {
+            const response = await fetch(`${BASE_URL}/profile?username=${username}`, {
                 method: 'GET',
                 headers: getAuthHeaders()
             });
 
+            const contentType = response.headers.get('Content-Type');
+            if (!response.ok || !contentType || !contentType.includes('application/json')) {
+                showMessage(userResults, 'Error al buscar usuario o respuesta no válida', 'error');
+                return;
+            }
+
             const data = await response.json();
 
-            if (response.ok) {
-                if (data.data && data.data.length > 0) {
-                    displayUserDetails(data.data[0], userResults);
-                } else {
-                    showMessage(userResults, 'Usuario no encontrado', 'error');
-                }
+            if (data.success && data.user) {
+                displayUserDetails(data.user, userResults);
             } else {
-                showMessage(userResults, data.error || 'Error al buscar usuario', 'error');
+                showMessage(userResults, 'Usuario no encontrado', 'error');
             }
         } catch (error) {
             console.error('Error:', error);
