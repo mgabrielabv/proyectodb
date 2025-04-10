@@ -42,7 +42,10 @@ async function handleLogin() {
 
     try {
         // Datos para enviar al servidor
-        const loginData = { email, password, admin_code: adminCode };
+        const loginData = { email, password };
+        if (isAdmin) {
+            loginData.adminCode = adminCode;
+        }
 
         // 1. Verificar credenciales y código admin si aplica
         const response = await fetch('http://localhost:4000/login', {
@@ -60,7 +63,7 @@ async function handleLogin() {
         }
 
         // 2. Redirigir según el tipo de usuario
-        if (data.isAdmin) {
+        if (isAdmin && data.isAdmin) {
             showMessage('Acceso administrativo concedido', 'green');
             setTimeout(() => {
                 window.location.href = 'admin.html';
