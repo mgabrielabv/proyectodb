@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel de Administración</title>
-    <link rel="stylesheet" href="../proyectodb/proyectodb-master/css/admin.css">
+    <link rel="stylesheet" href="proyectodb-master/css/admin.css">
 </head>
 <body>
+    <header class="app-header">
+        <h1>Panel de Administración</h1>
+        <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+        </button>
+    </header>
     <div class="admin-container">
         <form class="admin-form">
             <h1 class="admin-title">Panel de Administración</h1>
@@ -33,7 +39,6 @@
             <div id="message-container"></div>
         </form>
     </div>
-    <link rel="stylesheet" href="../proyectodb/proyectodb-master/css/admin.css">
-    <script src="js/admin.js"></script>
+    <script src="./proyectodb-master/js/admin.js"></script>
 </body>
 </html>
