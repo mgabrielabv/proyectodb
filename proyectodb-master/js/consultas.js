@@ -166,11 +166,11 @@ async function cerrarSesion() {
         } else {
             const errorData = await response.json();
             console.error('Error al cerrar sesión:', errorData.error);
-            mostrarError("cartasResultado", 'Error al cerrar sesión. Intenta nuevamente.');
+            mostrarError("logoutResultado", 'Error al cerrar sesión. Intenta nuevamente.');
         }
     } catch (error) {
         console.error('Error al cerrar sesión:', error);
-        mostrarError("cartasResultado", 'Error de conexión al cerrar sesión');
+        mostrarError("logoutResultado", 'Error de conexión al cerrar sesión');
     }
 }
 
